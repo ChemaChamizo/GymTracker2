@@ -10,8 +10,8 @@ const DB = {
         // Inicializar desde localStorage o crear estructura inicial
         init() {
             const savedUsers = localStorage.getItem('gymtracker_users');
-            const savedCurrentUser = localStorage.getItem('gymtracker_currentUser');
-            
+this.users = savedUsers ? JSON.parse(savedUsers) : {};
+localStorage.setItem('gymtracker_users', JSON.stringify(this.users));            
             if (savedUsers) {
                 this.users = JSON.parse(savedUsers);
             } else {
