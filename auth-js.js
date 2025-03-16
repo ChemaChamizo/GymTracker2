@@ -1,5 +1,7 @@
 // auth.js - Manejador de autenticación
 // Este archivo maneja los eventos de login y registro
+// Importar el objeto DB desde app.js
+import { DB } from './app.js';
 
 // Cambio entre formularios de login/registro
 document.querySelectorAll('input[name="loginOption"]').forEach(radio => {
