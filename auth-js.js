@@ -3,6 +3,20 @@
 // Importar el objeto DB desde app.js
 import { DB } from './app.js';
 
+// Función para cambiar de vista
+function showView(viewId) {
+    // Ocultar todas las vistas
+    document.querySelectorAll('.view-content').forEach(view => {
+        view.classList.remove('active-view');
+    });
+    
+    // Mostrar la vista solicitada
+    const viewToShow = document.getElementById(viewId);
+    if (viewToShow) {
+        viewToShow.classList.add('active-view');
+    }
+}
+
 // Cambio entre formularios de login/registro
 document.querySelectorAll('input[name="loginOption"]').forEach(radio => {
     radio.addEventListener('change', (e) => {
@@ -37,8 +51,6 @@ document.getElementById('register-form').addEventListener('submit', function(e) 
     }
     
     // Acceder a la base de datos y registrar al usuario
-    // Usamos el objeto DB directamente ya que está definido en app.js
-    // que se carga globalmente
     try {
         // Intentar registrar al usuario
         const result = DB.users.register(email, password);
@@ -87,9 +99,19 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
             messageElement.textContent = '¡Sesión iniciada correctamente!';
             messageElement.style.display = 'block';
             
-            // Aquí puedes redirigir a la vista principal
-            // Por ejemplo: window.location.href = 'dashboard.html';
-            // O cambiar la vista activa en la SPA
+            // Redirigir a la vista principal después de un breve retraso
+            setTimeout(() => {
+                // Activar el elemento de navegación de entrenamiento
+                document.querySelectorAll('.nav-link').forEach(link => {
+                    link.classList.remove('active');
+                });
+                document.querySelector('#nav-training .nav-link').classList.add('active');
+                
+                // Cambiar vista - asumiendo que hay una vista llamada 'training-view'
+                // Si no existe, debes crear una vista en tu HTML con este ID
+                // o cambiar esto al ID de la vista que deseas mostrar
+                showView('training-view');
+            }, 1000);
             
             // Limpiar formulario
             this.reset();
@@ -104,4 +126,30 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
         messageElement.textContent = 'Error al iniciar sesión: ' + error.message;
         messageElement.style.display = 'block';
     }
+});
+
+// También debemos agregar eventos para los elementos de navegación
+document.addEventListener('DOMContentLoaded', function() {
+    // Evento para cada elemento de navegación
+    document.querySelectorAll('.navbar-nav .nav-item').forEach(navItem => {
+        navItem.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Si no hay usuario logueado y no es la vista de inicio, redirigir al login
+            if (!DB.users.currentUser && this.id !== 'nav-home') {
+                showView('login-view');
+                return;
+            }
+            
+            // Cambiar la clase active
+            document.querySelectorAll('.navbar-nav .nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+            this.querySelector('.nav-link').classList.add('active');
+            
+            // Mostrar la vista correspondiente según el ID del elemento de navegación
+            const viewId = this.id.replace('nav-', '') + '-view';
+            showView(viewId);
+        });
+    });
 });
