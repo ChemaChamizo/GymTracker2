@@ -285,7 +285,7 @@ function generateProgramSchedule(questionnaireData) {
     return schedule;
 }
 
-// Funciones para generar diferentes tipos de sesiones
+// Funciones para generar diferentes tipos de sesiones (ejemplos)
 function generatePowerliftingSession(day, week, type) {
     if (type === 'fullbody') {
         return {
@@ -298,4 +298,103 @@ function generatePowerliftingSession(day, week, type) {
                 { id: 'deadlift', sets: 3, repsMin: 5, repsMax: 5, rpe: 8 },
                 { id: 'overhead-press', sets: 3, repsMin: 8, repsMax: 10, rpe: 7 },
                 { id: 'barbell-row', sets: 3, repsMin: 8, repsMax: 10, rpe: 7 }
-           
+            ]
+        };
+    } else {
+        // Ejemplo básico de split de powerlifting
+        const focusByDay = ['squat', 'bench', 'deadlift', 'accessories', 'squat-variation'];
+        const focus = focusByDay[(day - 1) % focusByDay.length];
+        return {
+            day,
+            name: `Día ${day}: ${focus.charAt(0).toUpperCase() + focus.slice(1)}`,
+            focus,
+            exercises: []  // Aquí se añadirían ejercicios específicos
+        };
+    }
+}
+
+function generateBodybuildingSession(day, week, daysPerWeek) {
+    // Ejemplo simplificado
+    const splits = [
+        ['fullbody'], // 1 día
+        ['upper', 'lower'], // 2 días
+        ['push', 'pull', 'legs'], // 3 días
+        ['chest-triceps', 'back-biceps', 'legs', 'shoulders-arms'], // 4 días
+        ['chest', 'back', 'legs', 'shoulders', 'arms'], // 5 días
+        ['chest', 'back', 'legs', 'shoulders', 'arms', 'cardio'] // 6 días
+    ];
+    
+    const splitToUse = splits[Math.min(daysPerWeek, 6) - 1];
+    const focus = splitToUse[(day - 1) % splitToUse.length];
+    
+    return {
+        day,
+        name: `Día ${day}: ${focus.charAt(0).toUpperCase() + focus.slice(1)}`,
+        focus,
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+// Funciones faltantes para otros tipos de entrenamiento
+function generateWeightliftingSession(day, week, daysPerWeek) {
+    // Implementación básica
+    const focus = day % 2 === 0 ? 'snatch' : 'clean-and-jerk';
+    return {
+        day,
+        name: `Día ${day}: ${focus.charAt(0).toUpperCase() + focus.slice(1)}`,
+        focus,
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+function generateHybridSession(day, week, daysPerWeek) {
+    const focusTypes = ['strength', 'hypertrophy', 'power', 'endurance'];
+    return {
+        day,
+        name: `Día ${day}: ${focusTypes[day % focusTypes.length]}`,
+        focus: focusTypes[day % focusTypes.length],
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+function generateCrosstrainingSession(day, week) {
+    const workoutTypes = ['gymnastics', 'metabolic', 'weightlifting', 'mixed'];
+    return {
+        day,
+        name: `WOD ${day}`,
+        focus: workoutTypes[day % workoutTypes.length],
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+function generateFunctionalSession(day, week) {
+    const focusAreas = ['mobility', 'stability', 'strength', 'power', 'endurance'];
+    return {
+        day,
+        name: `Sesión Funcional ${day}`,
+        focus: focusAreas[day % focusAreas.length],
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+function generateRunnerSession(day, week, daysPerWeek) {
+    const sessionTypes = ['upper-body', 'lower-body', 'core', 'explosive'];
+    return {
+        day,
+        name: `Fuerza para Corredores: ${sessionTypes[day % sessionTypes.length]}`,
+        focus: sessionTypes[day % sessionTypes.length],
+        exercises: [] // Aquí se añadirían ejercicios específicos
+    };
+}
+
+function generateGeneralTrainingSession(day, week) {
+    return {
+        day,
+        name: `Entrenamiento General ${day}`,
+        focus: 'general',
+        exercises: [] // Aquí se añadirían ejercicios específicos para entrenamiento general
+    };
+}
+
+// Exportar la base de datos para su uso en otros archivos
+export default DB;
