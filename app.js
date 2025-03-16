@@ -215,137 +215,87 @@ const DB = {
     }
 };
 
-// Datos de ejercicios
-const EXERCISES = [
-    {
-        id: 'back-squat',
-        name: 'Back Squat',
-        categories: ['PW', 'WL', 'MC', 'HT'],
-        fatigue: 'high',
-        muscles: ['quadriceps', 'glutes', 'lower_back']
-    },
-    {
-        id: 'bench-press',
-        name: 'Bench Press',
-        categories: ['PW', 'MC', 'HT'],
-        fatigue: 'medium',
-        muscles: ['chest', 'triceps', 'shoulders']
-    },
-    {
-        id: 'deadlift',
-        name: 'Deadlift',
-        categories: ['PW', 'MC', 'HT'],
-        fatigue: 'high',
-        muscles: ['hamstrings', 'glutes', 'lower_back', 'traps']
-    },
-    {
-        id: 'overhead-press',
-        name: 'Overhead Press',
-        categories: ['PW', 'MC', 'HT'],
-        fatigue: 'medium',
-        muscles: ['shoulders', 'triceps', 'upper_back']
-    },
-    {
-        id: 'pull-up',
-        name: 'Pull-up',
-        categories: ['MC', 'CT', 'FT'],
-        fatigue: 'medium',
-        muscles: ['lats', 'biceps', 'forearms']
-    },
-    {
-        id: 'barbell-row',
-        name: 'Barbell Row',
-        categories: ['PW', 'MC', 'HT'],
-        fatigue: 'medium',
-        muscles: ['lats', 'rhomboids', 'biceps', 'forearms']
-    },
-    {
-        id: 'leg-press',
-        name: 'Leg Press',
-        categories: ['MC', 'HT'],
-        fatigue: 'medium',
-        muscles: ['quadriceps', 'glutes', 'hamstrings']
-    },
-    {
-        id: 'dumbbell-shoulder-press',
-        name: 'Dumbbell Shoulder Press',
-        categories: ['MC', 'HT', 'FT'],
-        fatigue: 'medium',
-        muscles: ['shoulders', 'triceps']
-    },
-    {
-        id: 'dumbbell-bench-press',
-        name: 'Dumbbell Bench Press',
-        categories: ['MC', 'HT', 'FT'],
-        fatigue: 'medium',
-        muscles: ['chest', 'triceps', 'shoulders']
-    },
-    {
-        id: 'romanian-deadlift',
-        name: 'Romanian Deadlift',
-        categories: ['PW', 'MC', 'HT', 'RS'],
-        fatigue: 'medium',
-        muscles: ['hamstrings', 'glutes', 'lower_back']
-    },
-    {
-        id: 'lat-pulldown',
-        name: 'Lat Pulldown',
-        categories: ['MC', 'HT', 'FT'],
-        fatigue: 'low',
-        muscles: ['lats', 'biceps', 'forearms']
-    },
-    {
-        id: 'bulgarian-split-squat',
-        name: 'Bulgarian Split Squat',
-        categories: ['MC', 'HT', 'FT', 'RS'],
-        fatigue: 'medium',
-        muscles: ['quadriceps', 'glutes', 'hamstrings']
-    },
-    {
-        id: 'clean',
-        name: 'Clean',
-        categories: ['WL', 'CT', 'HT'],
-        fatigue: 'high',
-        muscles: ['quadriceps', 'glutes', 'traps', 'shoulders']
-    },
-    {
-        id: 'snatch',
-        name: 'Snatch',
-        categories: ['WL', 'CT', 'HT'],
-        fatigue: 'high',
-        muscles: ['quadriceps', 'glutes', 'shoulders', 'traps']
-    },
-    {
-        id: 'jerk',
-        name: 'Jerk',
-        categories: ['WL', 'CT', 'HT'],
-        fatigue: 'medium',
-        muscles: ['quadriceps', 'shoulders', 'triceps']
-    },
-    {
-        id: 'push-press',
-        name: 'Push Press',
-        categories: ['WL', 'CT', 'HT', 'FT'],
-        fatigue: 'medium',
-        muscles: ['shoulders', 'triceps', 'quadriceps']
-    },
-    {
-        id: 'kettlebell-swing',
-        name: 'Kettlebell Swing',
-        categories: ['CT', 'FT', 'HT', 'RS'],
-        fatigue: 'medium',
-        muscles: ['glutes', 'hamstrings', 'lower_back']
-    },
-    {
-        id: 'front-squat',
-        name: 'Front Squat',
-        categories: ['WL', 'CT', 'HT', 'PW'],
-        fatigue: 'high',
-        muscles: ['quadriceps', 'glutes', 'upper_back']
-    },
-    {
-        id: 'box-jump',
-        name: 'Box Jump',
-        categories: ['CT', 'FT', 'RS'],
-        fatigue: 'medium',
-        muscles: ['
+// Inicializar la base de datos simulada
+DB.users.init();
+
+// Función para generar estructura del programa de entrenamiento
+function generateProgramSchedule(questionnaireData) {
+    // Esta función sería mucho más compleja y personalizada en una implementación real
+    // Por ahora, generamos un programa esquemático basado en el tipo de entrenamiento y días disponibles
+    
+    const daysPerWeek = parseInt(questionnaireData.trainingDays);
+    const trainingType = questionnaireData.trainingType;
+    let schedule = [];
+    
+    // Generamos 12 semanas
+    for (let week = 1; week <= 12; week++) {
+        let weekSchedule = [];
+        
+        // Según los días disponibles, creamos sesiones apropiadas para el tipo de entrenamiento
+        for (let day = 1; day <= daysPerWeek; day++) {
+            let session = {};
+            
+            // Distribución según tipo de entrenamiento
+            switch (trainingType) {
+                case 'PW': // Powerlifting
+                    if (daysPerWeek <= 3) {
+                        session = generatePowerliftingSession(day, week, 'fullbody');
+                    } else {
+                        session = generatePowerliftingSession(day, week, 'split');
+                    }
+                    break;
+                    
+                case 'MC': // Musculación
+                    session = generateBodybuildingSession(day, week, daysPerWeek);
+                    break;
+                    
+                case 'WL': // Weightlifting
+                    session = generateWeightliftingSession(day, week, daysPerWeek);
+                    break;
+                    
+                case 'HT': // Entrenamiento híbrido
+                    session = generateHybridSession(day, week, daysPerWeek);
+                    break;
+                    
+                case 'CT': // Crosstraining
+                    session = generateCrosstrainingSession(day, week);
+                    break;
+                    
+                case 'FT': // Entrenamiento funcional
+                    session = generateFunctionalSession(day, week);
+                    break;
+                    
+                case 'RS': // Fuerza para corredores
+                    session = generateRunnerSession(day, week, daysPerWeek);
+                    break;
+                    
+                default:
+                    session = generateGeneralTrainingSession(day, week);
+            }
+            
+            weekSchedule.push(session);
+        }
+        
+        schedule.push({
+            week,
+            sessions: weekSchedule
+        });
+    }
+    
+    return schedule;
+}
+
+// Funciones para generar diferentes tipos de sesiones
+function generatePowerliftingSession(day, week, type) {
+    if (type === 'fullbody') {
+        return {
+            day,
+            name: `Día ${day}: Full Body`,
+            focus: 'fullbody',
+            exercises: [
+                { id: 'back-squat', sets: 4, repsMin: 5, repsMax: 5, rpe: 8 },
+                { id: 'bench-press', sets: 4, repsMin: 5, repsMax: 5, rpe: 8 },
+                { id: 'deadlift', sets: 3, repsMin: 5, repsMax: 5, rpe: 8 },
+                { id: 'overhead-press', sets: 3, repsMin: 8, repsMax: 10, rpe: 7 },
+                { id: 'barbell-row', sets: 3, repsMin: 8, repsMax: 10, rpe: 7 }
+           
