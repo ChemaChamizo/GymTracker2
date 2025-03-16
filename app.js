@@ -50,15 +50,6 @@ localStorage.setItem('gymtracker_users', JSON.stringify(this.users));
         
         // Login de usuario
         login(email, password) {
-            const users = JSON.parse(localStorage.getItem('gymtracker_users')) || {};
-            
-            if (!users[email] || users[email].password !== password) {
-                return { success: false, message: 'Credenciales incorrectas' };
-            }
-            
-            this.currentUser = users[email];
-            // Login de usuario
-login(email, password) {
     const users = JSON.parse(localStorage.getItem('gymtracker_users')) || {};
     
     if (!users[email] || users[email].password !== password) {
@@ -68,9 +59,7 @@ login(email, password) {
     this.currentUser = users[email];
     localStorage.setItem('gymtracker_currentUser', JSON.stringify(this.currentUser));
     return { success: true };
-}            return { success: true };
-        },
-        
+}        
         // Actualización del perfil
         updateProfile(profileData) {
             if (!this.currentUser) {
