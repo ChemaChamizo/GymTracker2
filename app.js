@@ -6,12 +6,13 @@ const DB = {
     // Gestión de usuarios
     users: {
         currentUser: null,
+        usersList: {}, // Añadir esta propiedad para almacenar la lista de usuarios
         
         // Inicializar desde localStorage o crear estructura inicial
         init() {
             const savedUsers = localStorage.getItem('gymtracker_users');
-            this.users = savedUsers ? JSON.parse(savedUsers) : {};
-            localStorage.setItem('gymtracker_users', JSON.stringify(this.users));
+            this.usersList = savedUsers ? JSON.parse(savedUsers) : {};
+            localStorage.setItem('gymtracker_users', JSON.stringify(this.usersList));
             
             const savedCurrentUser = localStorage.getItem('gymtracker_currentUser');
             if (savedCurrentUser) {
@@ -39,6 +40,9 @@ const DB = {
                 trainings: [],
                 program: null
             };
+            
+            // Actualizar también nuestra copia local
+            this.usersList = users;
             
             localStorage.setItem('gymtracker_users', JSON.stringify(users));
             return { success: true };
@@ -69,6 +73,10 @@ const DB = {
                 ...profileData
             };
             
+            // Actualizar también nuestra copia local
+            this.usersList = users;
+            this.currentUser = users[this.currentUser.email];
+            
             localStorage.setItem('gymtracker_users', JSON.stringify(users));
             localStorage.setItem('gymtracker_currentUser', JSON.stringify(users[this.currentUser.email]));
             
@@ -80,7 +88,7 @@ const DB = {
             this.currentUser = null;
             localStorage.removeItem('gymtracker_currentUser');
         }
-    },
+    }
     
     // El resto del código de app.js sigue igual...
     // ...
