@@ -1,9 +1,8 @@
 // Importación de dependencias
 import Chart from 'chart.js';
 
-// Base de datos simulada (LocalStorage)
-// Nota: Definimos DB como variable global para que sea accesible desde otros scripts
-window.DB = {
+// Base de datos simulada usando módulos ES6
+const DB = {
     // Gestión de usuarios
     users: {
         currentUser: null,
@@ -88,6 +87,7 @@ window.DB = {
 };
 
 // Inicializar la base de datos simulada
-window.DB.users.init();
+DB.users.init();
 
-// No necesitamos exportar DB porque ahora es global a través de window.DB
+// Exportar el objeto DB
+export { DB };
