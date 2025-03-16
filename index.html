@@ -1,0 +1,777 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GymTracker Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script type="importmap">
+        {
+            "imports": {
+                "chart.js": "https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navegación principal -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#"><i class="bi bi-lightning-charge-fill"></i> GymTracker Pro</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item" id="nav-home">
+                            <a class="nav-link active" href="#"><i class="bi bi-house"></i> Inicio</a>
+                        </li>
+                        <li class="nav-item" id="nav-training">
+                            <a class="nav-link" href="#"><i class="bi bi-stopwatch"></i> Entrenamiento</a>
+                        </li>
+                        <li class="nav-item" id="nav-history">
+                            <a class="nav-link" href="#"><i class="bi bi-journal-text"></i> Historial</a>
+                        </li>
+                        <li class="nav-item" id="nav-metrics">
+                            <a class="nav-link" href="#"><i class="bi bi-graph-up"></i> Métricas</a>
+                        </li>
+                        <li class="nav-item" id="nav-profile">
+                            <a class="nav-link" href="#"><i class="bi bi-person-circle"></i> Perfil</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenedor principal de vistas -->
+        <main id="main-content" class="container mt-4">
+            <!-- Vista de Inicio/Login -->
+            <div id="login-view" class="view-content active-view">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h3 class="mb-0">Bienvenido a GymTracker Pro</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="loginOption" id="loginRadio" value="login" checked>
+                                        <label class="form-check-label" for="loginRadio">Iniciar Sesión</label>
+                                    </div>
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="loginOption" id="registerRadio" value="register">
+                                        <label class="form-check-label" for="registerRadio">Registrarse</label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Formulario de inicio de sesión -->
+                                <form id="login-form">
+                                    <div class="mb-3">
+                                        <label for="loginEmail" class="form-label">Correo electrónico</label>
+                                        <input type="email" class="form-control" id="loginEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="loginPassword" class="form-label">Contraseña</label>
+                                        <input type="password" class="form-control" id="loginPassword" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                                </form>
+                                
+                                <!-- Formulario de registro (oculto inicialmente) -->
+                                <form id="register-form" style="display:none;">
+                                    <div class="mb-3">
+                                        <label for="registerEmail" class="form-label">Correo electrónico</label>
+                                        <input type="email" class="form-control" id="registerEmail" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPassword" class="form-label">Contraseña</label>
+                                        <input type="password" class="form-control" id="registerPassword" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="registerPasswordConfirm" class="form-label">Confirmar Contraseña</label>
+                                        <input type="password" class="form-control" id="registerPasswordConfirm" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-success w-100">Crear Cuenta</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cuestionario de Registro -->
+            <div id="questionnaire-view" class="view-content">
+                <div class="card shadow">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="mb-0">Cuestionario Inicial</h3>
+                        <p class="mb-0">Completa este cuestionario para generar tu programa de entrenamiento personalizado</p>
+                    </div>
+                    <div class="card-body">
+                        <form id="questionnaire-form">
+                            <div class="mb-3">
+                                <label for="qName" class="form-label">Nombre o alias</label>
+                                <input type="text" class="form-control" id="qName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="qBirthdate" class="form-label">Fecha de nacimiento</label>
+                                <input type="date" class="form-control" id="qBirthdate" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="qWeight" class="form-label">Peso actual (kg)</label>
+                                <input type="number" class="form-control" id="qWeight" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Experiencia entrenando</label>
+                                <select class="form-select" id="qExperience" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="principiante">Principiante</option>
+                                    <option value="intermedio">Intermedio</option>
+                                    <option value="avanzado">Avanzado</option>
+                                    <option value="elite">Élite</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="qInjuries" class="form-label">Número de lesiones asociadas al entrenamiento en los últimos años</label>
+                                <input type="number" class="form-control" id="qInjuries" min="0" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Modalidad de entrenamiento elegida</label>
+                                <select class="form-select" id="qTrainingType" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="PW">Powerlifting (PW)</option>
+                                    <option value="MC">Musculación (MC)</option>
+                                    <option value="WL">Weightlifting (WL)</option>
+                                    <option value="HT">Entrenamiento híbrido (HT)</option>
+                                    <option value="CT">Crosstraining (CT)</option>
+                                    <option value="FT">Entrenamiento funcional (FT)</option>
+                                    <option value="RS">Fuerza para corredores (RS)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="qTrainingDays" class="form-label">¿Cuántos días a la semana puedes entrenar?</label>
+                                <select class="form-select" id="qTrainingDays" required>
+                                    <option value="">Selecciona una opción</option>
+                                    <option value="1">1 día</option>
+                                    <option value="2">2 días</option>
+                                    <option value="3">3 días</option>
+                                    <option value="4">4 días</option>
+                                    <option value="5">5 días</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Enviar y Generar Programa</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de elección post-cuestionario -->
+            <div id="program-options-view" class="view-content">
+                <div class="card shadow">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">¡Tu programa ha sido generado!</h3>
+                        <p class="mb-0">Elige cómo quieres continuar</p>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100 border-primary">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">Probar una semana gratuita</h5>
+                                        <p class="card-text">Comienza con tu programa personalizado de 12 semanas ahora. La primera semana es gratuita.</p>
+                                        <button id="try-program-btn" class="btn btn-primary mt-auto">Empezar semana de prueba</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="card h-100 border-secondary">
+                                    <div class="card-body d-flex flex-column">
+                                        <h5 class="card-title">Usar app para registro manual</h5>
+                                        <p class="card-text">Utiliza la aplicación solo para registrar tus entrenamientos manualmente, sin seguir el programa generado.</p>
+                                        <button id="manual-tracking-btn" class="btn btn-secondary mt-auto">Continuar a la app</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Home/Dashboard -->
+            <div id="dashboard-view" class="view-content">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Panel de Control</h4>
+                                <span id="today-date" class="badge bg-light text-dark"></span>
+                            </div>
+                            <div class="card-body">
+                                <div class="row mb-4">
+                                    <div class="col-md-6">
+                                        <div class="card border-success mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">Próximo Entrenamiento</h5>
+                                                <div id="next-training" class="mt-3">
+                                                    <p class="lead">Día 2: Piernas y Core</p>
+                                                    <p>Semana 1 de 12</p>
+                                                    <button class="btn btn-success mt-2" id="start-training-btn">
+                                                        <i class="bi bi-play-fill"></i> Iniciar Entrenamiento
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="card border-info mb-3">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title">Resumen de Progreso</h5>
+                                                <div class="d-flex justify-content-around align-items-center mt-3">
+                                                    <div class="text-center">
+                                                        <h2 class="mb-0">8</h2>
+                                                        <small>Sesiones</small>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <h2 class="mb-0">65</h2>
+                                                        <small>Series</small>
+                                                    </div>
+                                                    <div class="text-center">
+                                                        <h2 class="mb-0">3500</h2>
+                                                        <small>kg totales</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card border-warning">
+                                            <div class="card-body">
+                                                <h5 class="card-title">Evolución de RM Estimado</h5>
+                                                <canvas id="rm-chart" height="150"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card shadow program-banner mb-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h5 class="mb-0">Tu programa personalizado</h5>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Modalidad:</strong> <span id="program-type">Powerlifting</span></p>
+                                <p><strong>Días/semana:</strong> <span id="program-days">4</span></p>
+                                <p><strong>Progreso:</strong> <span id="program-progress">Semana 1 de 12</span></p>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 8%" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100">8%</div>
+                                </div>
+                                <button class="btn btn-outline-warning w-100">Ver programa completo</button>
+                            </div>
+                        </div>
+                        
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">Últimos entrenamientos</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>Push - Pectorales y Hombros</strong>
+                                            <div class="text-muted small">12/10/2023</div>
+                                        </div>
+                                        <span class="badge bg-success rounded-pill">Completado</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>Pull - Espalda y Bíceps</strong>
+                                            <div class="text-muted small">10/10/2023</div>
+                                        </div>
+                                        <span class="badge bg-success rounded-pill">Completado</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>Legs - Piernas y Core</strong>
+                                            <div class="text-muted small">08/10/2023</div>
+                                        </div>
+                                        <span class="badge bg-warning text-dark rounded-pill">Parcial</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-footer">
+                                <a href="#" class="btn btn-sm btn-outline-info w-100">Ver todo el historial</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de entrenamiento -->
+            <div id="training-view" class="view-content">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Nueva Sesión de Entrenamiento</h4>
+                    </div>
+                    <div class="card-body">
+                        <!-- Pregunta diaria antes de entrenar -->
+                        <div id="daily-feeling-prompt" class="mb-4">
+                            <h5>¿Cómo te sientes hoy antes de entrenar?</h5>
+                            <div class="mt-3">
+                                <button class="btn btn-outline-success me-2 mb-2 feeling-btn" data-value="excellent">
+                                    <i class="bi bi-emoji-smile-fill"></i> Excelente, bien descansado
+                                </button>
+                                <button class="btn btn-outline-primary me-2 mb-2 feeling-btn" data-value="good">
+                                    <i class="bi bi-emoji-neutral-fill"></i> Bien, normal
+                                </button>
+                                <button class="btn btn-outline-warning me-2 mb-2 feeling-btn" data-value="tired">
+                                    <i class="bi bi-emoji-frown-fill"></i> Cansado pero puedo entrenar
+                                </button>
+                                <button class="btn btn-outline-danger mb-2 feeling-btn" data-value="verytired">
+                                    <i class="bi bi-emoji-dizzy-fill"></i> Muy fatigado o con molestias
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Formulario de entrenamiento (inicialmente oculto) -->
+                        <div id="training-form-container" style="display:none;">
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5>Ejercicios de hoy</h5>
+                                    <button id="add-exercise-btn" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-plus-circle"></i> Añadir ejercicio
+                                    </button>
+                                </div>
+                                
+                                <div id="exercises-container">
+                                    <!-- Aquí se agregarán dinámicamente los ejercicios -->
+                                </div>
+                            </div>
+                            
+                            <div class="card mb-4 bg-light">
+                                <div class="card-body">
+                                    <h5>Resumen de la sesión</h5>
+                                    <div class="row">
+                                        <div class="col-md-3 mb-2">
+                                            <div class="card border-primary h-100">
+                                                <div class="card-body text-center">
+                                                    <h3 id="total-exercises">0</h3>
+                                                    <small>Ejercicios</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div class="card border-success h-100">
+                                                <div class="card-body text-center">
+                                                    <h3 id="total-sets">0</h3>
+                                                    <small>Series</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div class="card border-info h-100">
+                                                <div class="card-body text-center">
+                                                    <h3 id="total-volume">0</h3>
+                                                    <small>kg Totales</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3 mb-2">
+                                            <div class="card border-warning h-100">
+                                                <div class="card-body text-center">
+                                                    <h3 id="fatigue-index">0</h3>
+                                                    <small>Índice Fatiga</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3 text-center">
+                                <button id="save-training-btn" class="btn btn-lg btn-success">
+                                    <i class="bi bi-check-circle"></i> Finalizar y Guardar Entrenamiento
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de historial -->
+            <div id="history-view" class="view-content">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Historial de Entrenamientos</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Buscar por fecha, ejercicio o tipo..." id="search-history">
+                                    <button class="btn btn-outline-primary" type="button">Buscar</button>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <select class="form-select" id="history-filter">
+                                    <option value="all">Todos los entrenamientos</option>
+                                    <option value="week">Última semana</option>
+                                    <option value="month">Último mes</option>
+                                    <option value="type">Por tipo de entrenamiento</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Tipo</th>
+                                        <th>Ejercicios</th>
+                                        <th>Series</th>
+                                        <th>Volumen</th>
+                                        <th>Fatiga</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-table-body">
+                                    <tr>
+                                        <td>15/10/2023</td>
+                                        <td>Piernas</td>
+                                        <td>5</td>
+                                        <td>18</td>
+                                        <td>2,450 kg</td>
+                                        <td><span class="badge bg-warning">Medio</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>13/10/2023</td>
+                                        <td>Superior</td>
+                                        <td>6</td>
+                                        <td>24</td>
+                                        <td>1,850 kg</td>
+                                        <td><span class="badge bg-success">Bajo</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>10/10/2023</td>
+                                        <td>Full Body</td>
+                                        <td>8</td>
+                                        <td>32</td>
+                                        <td>3,200 kg</td>
+                                        <td><span class="badge bg-danger">Alto</span></td>
+                                        <td>
+                                            <button class="btn btn-sm btn-outline-info me-1"><i class="bi bi-eye"></i></button>
+                                            <button class="btn btn-sm btn-outline-danger"><i class="bi bi-trash"></i></button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <nav aria-label="Page navigation" class="mt-4">
+                            <ul class="pagination justify-content-center">
+                                <li class="page-item disabled">
+                                    <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="#">Siguiente</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de métricas -->
+            <div id="metrics-view" class="view-content">
+                <div class="card shadow mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4 class="mb-0">Métricas y Seguimiento</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-4">
+                            <div class="col-md-4">
+                                <select class="form-select mb-3" id="metrics-exercise-select">
+                                    <option value="">Selecciona un ejercicio</option>
+                                    <option value="squat">Back Squat</option>
+                                    <option value="bench">Bench Press</option>
+                                    <option value="deadlift">Deadlift</option>
+                                    <option value="shoulder-press">Shoulder Press</option>
+                                </select>
+                                
+                                <select class="form-select" id="metrics-period-select">
+                                    <option value="month">Último mes</option>
+                                    <option value="3months">Últimos 3 meses</option>
+                                    <option value="6months">Últimos 6 meses</option>
+                                    <option value="year">Último año</option>
+                                    <option value="all">Todo el historial</option>
+                                </select>
+                            </div>
+                            <div class="col-md-8">
+                                <div class="btn-group w-100" role="group">
+                                    <button type="button" class="btn btn-outline-primary active" data-metric="rm">RM Estimado</button>
+                                    <button type="button" class="btn btn-outline-primary" data-metric="volume">Volumen</button>
+                                    <button type="button" class="btn btn-outline-primary" data-metric="fatigue">Fatiga</button>
+                                    <button type="button" class="btn btn-outline-primary" data-metric="rpe">RPE</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title">Evolución del RM Estimado</h5>
+                                        <canvas id="metrics-chart" height="300"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Estadísticas Clave</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row text-center">
+                                            <div class="col-6 mb-3">
+                                                <div class="border rounded p-3">
+                                                    <h4 id="max-rm">120 kg</h4>
+                                                    <small>RM máximo</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="border rounded p-3">
+                                                    <h4 id="current-rm">115 kg</h4>
+                                                    <small>RM actual</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="border rounded p-3">
+                                                    <h4 id="avg-rpe">7.5</h4>
+                                                    <small>RPE promedio</small>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 mb-3">
+                                                <div class="border rounded p-3">
+                                                    <h4 id="progress-percentage">+8%</h4>
+                                                    <small>Progreso</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6 mb-4">
+                                <div class="card h-100">
+                                    <div class="card-header bg-light">
+                                        <h5 class="mb-0">Distribución de la Intensidad</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="intensity-chart" height="220"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Vista de perfil -->
+            <div id="profile-view" class="view-content">
+                <div class="row">
+                    <div class="col-md-4 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Perfil de Usuario</h4>
+                            </div>
+                            <div class="card-body text-center">
+                                <div class="profile-avatar mb-3">
+                                    <i class="bi bi-person-circle" style="font-size: 5rem;"></i>
+                                </div>
+                                <h5 id="profile-name">Usuario</h5>
+                                <p id="profile-email" class="text-muted"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b4c1c7c1d5c6dddbf4d1ded1d9c4d8db9ad7dbd9">[email&#160;protected]</a></p>
+                                <div class="mt-3">
+                                    <button class="btn btn-outline-primary btn-sm">Editar Perfil</button>
+                                </div>
+                                <hr>
+                                <div class="profile-stats">
+                                    <div class="row">
+                                        <div class="col">
+                                            <h5 id="profile-workouts">15</h5>
+                                            <small>Entrenamientos</small>
+                                        </div>
+                                        <div class="col">
+                                            <h5 id="profile-program-week">3</h5>
+                                            <small>Semana actual</small>
+                                        </div>
+                                        <div class="col">
+                                            <h5 id="profile-days-streak">5</h5>
+                                            <small>Racha</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-8 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Mis Datos</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="profile-form">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileName" class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" id="profileName" value="Usuario">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileEmail" class="form-label">Email</label>
+                                            <input type="email" class="form-control" id="profileEmail" value="usuario@ejemplo.com" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileBirthdate" class="form-label">Fecha de nacimiento</label>
+                                            <input type="date" class="form-control" id="profileBirthdate" value="1990-01-01">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileWeight" class="form-label">Peso actual (kg)</label>
+                                            <input type="number" class="form-control" id="profileWeight" value="75">
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileExperience" class="form-label">Experiencia</label>
+                                            <select class="form-select" id="profileExperience">
+                                                <option value="principiante">Principiante</option>
+                                                <option value="intermedio" selected>Intermedio</option>
+                                                <option value="avanzado">Avanzado</option>
+                                                <option value="elite">Élite</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="profileTrainingType" class="form-label">Modalidad de entrenamiento</label>
+                                            <select class="form-select" id="profileTrainingType">
+                                                <option value="PW" selected>Powerlifting (PW)</option>
+                                                <option value="MC">Musculación (MC)</option>
+                                                <option value="WL">Weightlifting (WL)</option>
+                                                <option value="HT">Entrenamiento híbrido (HT)</option>
+                                                <option value="CT">Crosstraining (CT)</option>
+                                                <option value="FT">Entrenamiento funcional (FT)</option>
+                                                <option value="RS">Fuerza para corredores (RS)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <div class="card shadow mt-4">
+                            <div class="card-header bg-warning text-dark">
+                                <h4 class="mb-0">Mi Programa de Entrenamiento</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <div>
+                                        <h5>Programa de Powerlifting</h5>
+                                        <p class="text-muted mb-0">Semana 3 de 12</p>
+                                    </div>
+                                    <div>
+                                        <button class="btn btn-outline-warning">Ver detalles</button>
+                                    </div>
+                                </div>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar bg-success" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+                                </div>
+                                <div class="alert alert-info">
+                                    <i class="bi bi-info-circle"></i> Puedes ajustar tu programa en cualquier momento según tus necesidades y rendimiento.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal para seleccionar ejercicio -->
+            <div class="modal fade" id="exercise-select-modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">Seleccionar Ejercicio</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="exercise-search" placeholder="Buscar ejercicio...">
+                            </div>
+                            <div class="mb-3">
+                                <div class="btn-group w-100 flex-wrap" role="group">
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="all">Todos</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="PW">Powerlifting</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="MC">Musculación</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="WL">Weightlifting</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="CT">Crosstraining</button>
+                                    <button type="button" class="btn btn-outline-secondary" data-filter="FT">Funcional</button>
+                                </div>
+                            </div>
+                            <div class="exercise-list-container">
+                                <div class="list-group" id="exercise-list">
+                                    <!-- Los ejercicios se cargarán dinámicamente -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Modal para detalles de la sesión -->
+            <div class="modal fade" id="session-details-modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">Detalles de la Sesión</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="session-details-content">
+                                <!-- Contenido generado dinámicamente -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="app.js" type="module"></script>
+</body>
+</html>
