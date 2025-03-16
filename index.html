@@ -49,7 +49,7 @@
         <!-- Contenedor principal de vistas -->
         <main id="main-content" class="container mt-4">
             <!-- Vista de Inicio/Login -->
-            <div id="login-view" class="view-content active-view">
+            <div id="home-view" class="view-content active-view">
                 <div class="row justify-content-center">
                     <div class="col-md-6">
                         <div class="card shadow">
@@ -106,13 +106,472 @@
                 </div>
             </div>
 
-            <!-- Otras vistas aquí -->
-        </main>
-    </div>
+            <!-- Vista de Entrenamiento -->
+            <div id="training-view" class="view-content">
+                <div class="row">
+                    <!-- Panel de control de entrenamiento -->
+                    <div class="col-md-12 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Entrenamiento Actual</h4>
+                                <div>
+                                    <button class="btn btn-light btn-sm me-2" id="start-training-btn">
+                                        <i class="bi bi-play-fill"></i> Iniciar
+                                    </button>
+                                    <button class="btn btn-light btn-sm me-2" id="pause-training-btn" style="display:none;">
+                                        <i class="bi bi-pause-fill"></i> Pausar
+                                    </button>
+                                    <button class="btn btn-light btn-sm" id="end-training-btn" style="display:none;">
+                                        <i class="bi bi-stop-fill"></i> Finalizar
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="mb-3">
+                                            <label for="training-name" class="form-label">Nombre del Entrenamiento</label>
+                                            <input type="text" class="form-control" id="training-name" placeholder="Ej: Piernas y Hombros">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="mb-3">
+                                            <label for="training-time" class="form-label">Tiempo</label>
+                                            <div id="training-time" class="form-control bg-light">00:00:00</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">¿Cómo te sientes hoy?</label>
+                                            <div class="d-flex flex-wrap">
+                                                <button class="btn btn-outline-success feeling-btn me-2 mb-2" data-feeling="great">
+                                                    <i class="bi bi-emoji-laughing"></i> Genial
+                                                </button>
+                                                <button class="btn btn-outline-primary feeling-btn me-2 mb-2" data-feeling="good">
+                                                    <i class="bi bi-emoji-smile"></i> Bien
+                                                </button>
+                                                <button class="btn btn-outline-warning feeling-btn me-2 mb-2" data-feeling="okay">
+                                                    <i class="bi bi-emoji-neutral"></i> Regular
+                                                </button>
+                                                <button class="btn btn-outline-danger feeling-btn me-2 mb-2" data-feeling="bad">
+                                                    <i class="bi bi-emoji-frown"></i> Mal
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="app.js" type="module"></script>
-    <script src="auth.js" type="module"></script>
-</body>
-</html>
+                <!-- Ejercicios del entrenamiento -->
+                <div class="row" id="exercise-container">
+                    <div class="col-12">
+                        <button class="btn btn-primary mb-4" id="add-exercise-btn">
+                            <i class="bi bi-plus-circle"></i> Añadir Ejercicio
+                        </button>
+                    </div>
+
+                    <!-- Ejemplo de tarjeta de ejercicio -->
+                    <div class="col-12 exercise-card fadeIn">
+                        <div class="card shadow">
+                            <div class="card-header exercise-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Back Squat</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-primary me-2">
+                                        <i class="bi bi-pencil"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- Sets -->
+                                <div class="set-row d-flex align-items-center">
+                                    <div class="set-number me-3">1</div>
+                                    <div class="flex-grow-1 row">
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">Peso (kg)</label>
+                                            <input type="number" class="form-control" value="100">
+                                        </div>
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">Reps</label>
+                                            <input type="number" class="form-control" value="5">
+                                        </div>
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">RPE</label>
+                                            <select class="form-select">
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9">9</option>
+                                                <option value="10" selected>10</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">1RM Estimado</label>
+                                            <div class="form-control bg-light">116 kg</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="set-row d-flex align-items-center">
+                                    <div class="set-number me-3">2</div>
+                                    <div class="flex-grow-1 row">
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">Peso (kg)</label>
+                                            <input type="number" class="form-control" value="100">
+                                        </div>
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">Reps</label>
+                                            <input type="number" class="form-control" value="5">
+                                        </div>
+                                        <div class="col-md-3 mb-2 mb-md-0">
+                                            <label class="form-label">RPE</label>
+                                            <select class="form-select">
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                                <option value="8">8</option>
+                                                <option value="9" selected>9</option>
+                                                <option value="10">10</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">1RM Estimado</label>
+                                            <div class="form-control bg-light">113 kg</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Botones de acción -->
+                                <div class="d-flex justify-content-end mt-3">
+                                    <button class="btn btn-outline-primary me-2">
+                                        <i class="bi bi-plus-circle"></i> Añadir Serie
+                                    </button>
+                                    <button class="btn btn-outline-success">
+                                        <i class="bi bi-check-circle"></i> Completar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Historial -->
+            <div id="history-view" class="view-content">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card shadow mb-4">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Historial de Entrenamientos</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-4">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" placeholder="Buscar entrenamientos...">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="bi bi-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Lista de entrenamientos -->
+                                <div class="list-group">
+                                    <!-- Entrada del historial 1 -->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Entrenamiento de Piernas</h5>
+                                            <small>12/03/2025</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-primary me-2">45 min</span>
+                                                <span class="badge bg-success me-2">4 ejercicios</span>
+                                                <span class="badge bg-warning">Fatiga: Media</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-primary">Ver detalles</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Entrada del historial 2 -->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Push (Pecho, Hombros, Tríceps)</h5>
+                                            <small>10/03/2025</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-primary me-2">60 min</span>
+                                                <span class="badge bg-success me-2">5 ejercicios</span>
+                                                <span class="badge bg-danger">Fatiga: Alta</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-primary">Ver detalles</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Entrada del historial 3 -->
+                                    <div class="list-group-item list-group-item-action">
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <h5 class="mb-1">Pull (Espalda, Bíceps)</h5>
+                                            <small>08/03/2025</small>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div>
+                                                <span class="badge bg-primary me-2">55 min</span>
+                                                <span class="badge bg-success me-2">6 ejercicios</span>
+                                                <span class="badge bg-warning">Fatiga: Media</span>
+                                            </div>
+                                            <button class="btn btn-sm btn-outline-primary">Ver detalles</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Paginación -->
+                                <nav aria-label="Paginación del historial" class="mt-4">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+                                        </li>
+                                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Siguiente</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Modal para ver detalles del entrenamiento -->
+                <div class="modal fade" id="trainingDetailsModal" tabindex="-1" aria-labelledby="trainingDetailsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="trainingDetailsModalLabel">Detalles del Entrenamiento</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <!-- Aquí se cargarían dinámicamente los detalles -->
+                                <div class="mb-4">
+                                    <h5>Entrenamiento de Piernas - 12/03/2025</h5>
+                                    <div class="d-flex mb-3">
+                                        <div class="me-3">
+                                            <span class="badge bg-primary">45 min</span>
+                                        </div>
+                                        <div class="me-3">
+                                            <strong>Sensación:</strong> Buena
+                                        </div>
+                                        <div class="me-3">
+                                            <strong>Fatiga total:</strong> 
+                                            <span class="badge bg-warning">Media (67%)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Ejercicios -->
+                                <h6>Ejercicios realizados:</h6>
+                                <div class="list-group mb-3">
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <h6>1. Back Squat</h6>
+                                            <span class="badge bg-warning">Fatiga: 65%</span>
+                                        </div>
+                                        <div class="small">
+                                            <div>Serie 1: 100kg x 5 reps (RPE: 9)</div>
+                                            <div>Serie 2: 110kg x 4 reps (RPE: 9.5)</div>
+                                            <div>Serie 3: 110kg x 3 reps (RPE: 10)</div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item">
+                                        <div class="d-flex justify-content-between">
+                                            <h6>2. Romanian Deadlift</h6>
+                                            <span class="badge bg-danger">Fatiga: 75%</span>
+                                        </div>
+                                        <div class="small">
+                                            <div>Serie 1: 80kg x 8 reps (RPE: 8)</div>
+                                            <div>Serie 2: 90kg x 6 reps (RPE: 9)</div>
+                                            <div>Serie 3: 90kg x 5 reps (RPE: 9.5)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6 class="mb-0">Notas:</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <p class="mb-0">Buena sesión. Sentí fatiga en cuádriceps pero pude completar todos los ejercicios. Mejoré 5kg en sentadilla respecto a la semana pasada.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-primary">Exportar PDF</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Métricas -->
+            <div id="metrics-view" class="view-content">
+                <div class="row">
+                    <!-- Panel de control de métricas -->
+                    <div class="col-md-12 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Métricas de Rendimiento</h4>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Periodo</label>
+                                        <select class="form-select" id="metrics-period">
+                                            <option value="week">Última semana</option>
+                                            <option value="month" selected>Último mes</option>
+                                            <option value="3months">Últimos 3 meses</option>
+                                            <option value="6months">Últimos 6 meses</option>
+                                            <option value="year">Último año</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Categoría</label>
+                                        <select class="form-select" id="metrics-category">
+                                            <option value="all" selected>Todos los ejercicios</option>
+                                            <option value="PW">Powerlifting</option>
+                                            <option value="WL">Weightlifting</option>
+                                            <option value="MC">Movimientos compuestos</option>
+                                            <option value="HT">Hipertrofia</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Ejercicio específico</label>
+                                        <select class="form-select" id="metrics-exercise">
+                                            <option value="all" selected>Todos</option>
+                                            <option value="back-squat">Back Squat</option>
+                                            <option value="bench-press">Bench Press</option>
+                                            <option value="deadlift">Deadlift</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjetas de resumen -->
+                <div class="row mb-4">
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow text-center">
+                            <div class="card-body">
+                                <h3 class="metrics-value">18</h3>
+                                <div class="metrics-label">Entrenamientos</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow text-center">
+                            <div class="card-body">
+                                <h3 class="metrics-value">16h 30m</h3>
+                                <div class="metrics-label">Tiempo Total</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow text-center">
+                            <div class="card-body">
+                                <h3 class="metrics-value">34,800</h3>
+                                <div class="metrics-label">Kg Totales</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card shadow text-center">
+                            <div class="card-body">
+                                <h3 class="metrics-value">+8.5%</h3>
+                                <div class="metrics-label">Mejora en 1RM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gráficos -->
+                <div class="row">
+                    <!-- Gráfico de progresión 1RM -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <h5 class="mb-0">Progresión de 1RM</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="rm-progress-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráfico de volumen de entrenamiento -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <h5 class="mb-0">Volumen de Entrenamiento</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="volume-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráfico de fatiga -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <h5 class="mb-0">Índice de Fatiga</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="fatigue-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Gráfico de distribución de ejercicios -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header">
+                                <h5 class="mb-0">Distribución de Ejercicios</h5>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="exercise-distribution-chart" height="300"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Vista de Perfil -->
+            <div id="profile-view" class="view-content">
+                <div class="row">
+                    <!-- Información personal -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card shadow">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">Información Personal</h4>
+                            </div>
+                            <div class="card-body">
+                                <form id="profile-form">
+                                    <div class="mb-3">
+                                        <label for="profile-name" class="form-label">Nombre</label>
+                                        <input type="text" class="form-control" id="profile-name" placeholder="Tu nombre">
+                                    </div>
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <label for="profile-age" class="form-label">Edad</label>
+                                            <input type="number" class="form-control" id="profile-age">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="
